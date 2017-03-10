@@ -21,8 +21,11 @@ class Client(object):
         location = location
         self.weather_info = WeatherInfo()
 
+
+"""
     def showWeatherInfo(self):
         print self.weather_info
+"""
 
 
 class WeatherInfo(object):
@@ -30,12 +33,13 @@ class WeatherInfo(object):
 
     def __init__(self):
         '''constructor de la clase WeatherInfo'''
-        ownForecast = calculateOwnForecast()
+        self.almanac_dict = self.methodAlmanac()
+        self.hourly_dict = self.methodHourly()
+        self.meteo_data = MeteoData(self.almanac_dict, self.hourly_dict)
+        # text = []
 
-        almanac_dict = methodAlmanac()
-        hourly_dict = methodHourly()
-        meteorologicaldata = MeteorologicalData(almanac_dict, hourly_dict)
-        text = []
+    def printMeteorologicalData(self):
+        print self.meteorologicaldata
 
     def methodAlmanac(self):
         '''metodo que devuelve el historial del tiempo'''
@@ -58,14 +62,14 @@ class WeatherInfo(object):
         url_root = "http://api.wunderground.com/api/"
         return url_root + Client.api_key + function + Client.location + ".xml"
 
-    def showWeatherInfo(self):
-        print self.meteorologicaldata
-        print self.text
+    def printWeatherInfo(self):
+        pass
 
+    '''
     def calculateOwnForecast(self):
-        '''metodo que calcula la informacion para la prevision
-        a partir de los diccionarios obtenidos'''
-        information = []
+        metodo que calcula la informacion para la prevision
+        a partir de los diccionarios obtenidos
+        # information = []
         # tabla para las horas
         almanac_dict = self.methodAlmanac()
         hourly_dict = self.methodHourly()
@@ -73,19 +77,25 @@ class WeatherInfo(object):
         md = MeteorologicalData(almanac_dict, hourly_dict)
         return md
         # return information
+    '''
 
 
-class MeteorologicalData (object):
+class MeteoData (object):
     '''clase principal para los datos del clima'''
 
     def __init__(self, almanac_dict, hourly_dict):
-        current_time = time.strftime("%Y-%m-%d %H:%M")
-        # weather_condition = hourly_dict[]
-        # thermal_sensation
+        hourly_dict_root = hourly_dict['response']['hourly_forecast']
+        ['forecast']
+        # current_time = time.strftime("%Y-%m-%d %H:%M")
+        weather_condition = hourly_dict_root + ['FCTTIME']['hour']['#text']
+        # thermal_sensation = ['feelslike']
         # snow_cover
         # mean_sea_level_pressure
         # max_temperature =
         # min_temperatura =
+
+    def printMeteorologicalData(self):
+        pass
 
 
 if __name__ == "__main__":
@@ -101,3 +111,8 @@ if __name__ == "__main__":
         location = sys.argv[1]
 
     client = Client(api_key, location)
+    client.showWeatherInfo()
+
+    weather_info = WeatherInfo()
+
+    meteo_data = MeteoData()
