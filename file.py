@@ -5,27 +5,12 @@
 
 import sys
 import requests
-import xmltodict
+# import json
 
 '''
-Programa que a partir de una aplicacion web sobre clima y meteorologia
-hace web scraping de los datos y devuelve un prediccion al usuario
+Programa que a partir de una aplicacion web sobre clima y meteorologia,
+extrae los datos de la API y devuelve un prediccion del tiempo
 '''
-
-
-class Client(object):
-    '''clase principal para los datos del cliente'''
-
-    def __init__(self, api_key, location):
-        api_key = api_key
-        location = location
-        self.weather_info = WeatherInfo()
-
-
-"""
-    def showWeatherInfo(self):
-        print self.weather_info
-"""
 
 
 class WeatherInfo(object):
@@ -35,18 +20,19 @@ class WeatherInfo(object):
         '''constructor de la clase WeatherInfo'''
         self.almanac_dict = self.methodAlmanac()
         self.hourly_dict = self.methodHourly()
-        self.meteo_data = MeteoData(self.almanac_dict, self.hourly_dict)
-        # text = []
+        self.forecast = self.buildMeteoData()
 
-    def printMeteorologicalData(self):
-        print self.meteorologicaldata
+    """
+    def printMeteoData(self):
+        pass
+    """
 
     def methodAlmanac(self):
         '''metodo que devuelve el historial del tiempo'''
         return self.getWeb(self.buildUrl("/almanac/q/CA/"))
 
     def methodHourly(self):
-        return self.getWeb(self.buildUrl("/almanac/q/CA/"))
+        return self.getWeb(self.buildUrl("/hourly/q/CA/"))
 
     def getWeb(self, url_web):
         '''metodo que descarga la web'''
@@ -55,47 +41,38 @@ class WeatherInfo(object):
 
     def getDictionary(self, req):
         '''metodo que obtiene el diccionario a partir del xml'''
-        return xmltodict.parse(req.text)
+        return req.json()  # json.load(req)
 
     def buildUrl(self, function):
         '''metodo que construye la url'''
         url_root = "http://api.wunderground.com/api/"
-        return url_root + Client.api_key + function + Client.location + ".xml"
+        return url_root + api_key + function + location + ".json"
 
     def printWeatherInfo(self):
-        pass
+        print self.forecast
 
-    '''
-    def calculateOwnForecast(self):
-        metodo que calcula la informacion para la prevision
-        a partir de los diccionarios obtenidos
-        # information = []
-        # tabla para las horas
-        almanac_dict = self.methodAlmanac()
-        hourly_dict = self.methodHourly()
+    def buildMeteoData(self):
+        alamac_info = self.extractAlmanac()
+        # forecast = []
+        # meteo_data = {}
 
-        md = MeteorologicalData(almanac_dict, hourly_dict)
-        return md
-        # return information
-    '''
-
-
-class MeteoData (object):
-    '''clase principal para los datos del clima'''
-
-    def __init__(self, almanac_dict, hourly_dict):
-        hourly_dict_root = hourly_dict['response']['hourly_forecast']
-        ['forecast']
         # current_time = time.strftime("%Y-%m-%d %H:%M")
-        weather_condition = hourly_dict_root + ['FCTTIME']['hour']['#text']
-        # thermal_sensation = ['feelslike']
+
+        # hour_forecast =
+        # weather_condition =
+        # thermal_sensation =
         # snow_cover
         # mean_sea_level_pressure
         # max_temperature =
         # min_temperatura =
 
-    def printMeteorologicalData(self):
-        pass
+        # return forecast
+
+    def extractAlmanac(self):
+        print self.almanac_dict
+        max_tmp_record = self.almanac_dict { 'response' :'almanac':{'temp_high':{'record':{'C'}}}}
+        print max_tmp_record
+        # min_tmp_record =
 
 
 if __name__ == "__main__":
@@ -110,9 +87,5 @@ if __name__ == "__main__":
     else:
         location = sys.argv[1]
 
-    client = Client(api_key, location)
-    client.showWeatherInfo()
-
     weather_info = WeatherInfo()
-
-    meteo_data = MeteoData()
+    # weather_info.printWeatherInfo()
