@@ -5,7 +5,7 @@
 
 import sys
 import requests
-# import json
+import json
 
 '''
 Programa que a partir de una aplicacion web sobre clima y meteorologia,
@@ -41,7 +41,7 @@ class WeatherInfo(object):
 
     def getDictionary(self, req):
         '''metodo que obtiene el diccionario a partir del xml'''
-        return req.json()  # json.load(req)
+        return json.dumps(req.json())  # req.json()  json.load(req)
 
     def buildUrl(self, function):
         '''metodo que construye la url'''
@@ -52,12 +52,11 @@ class WeatherInfo(object):
         print self.forecast
 
     def buildMeteoData(self):
-        alamac_info = self.extractAlmanac()
-        # forecast = []
-        # meteo_data = {}
+        pass
+        # alamac_info = self.extractInfoAlmanac()
+        # hourly_info = self.extractInfoHourly()
 
         # current_time = time.strftime("%Y-%m-%d %H:%M")
-
         # hour_forecast =
         # weather_condition =
         # thermal_sensation =
@@ -68,11 +67,11 @@ class WeatherInfo(object):
 
         # return forecast
 
-    def extractAlmanac(self):
-        print self.almanac_dict
-        max_tmp_record = self.almanac_dict { 'response' :'almanac':{'temp_high':{'record':{'C'}}}}
-        print max_tmp_record
-        # min_tmp_record =
+    def extractInfoAlmanac(self):
+        pass
+
+    def extractInfoHourly(self):
+        pass
 
 
 if __name__ == "__main__":
